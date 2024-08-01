@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { View, Button, Alert, FlatList, Pressable} from "react-native";
 import {useProductDatabase, ProductDatabase} from "@/database/useProductDatabase"
 import { Product } from "@/components/Products";
+import { router } from "expo-router"
 
 
 export default function Index(){
@@ -21,7 +22,22 @@ export default function Index(){
             }
             const response = await productDatabase.create({name , quantity: Number(quantity)})
 
+
             Alert.alert("Produto cadastrado com ID: " + response.insertedRowId)
+        }catch(error){
+            console.log(error)
+        }
+    }
+
+    async function update(){
+        try{
+            if(isNaN(Number(quantity))){
+                return Alert.alert("Quantidade", "A quantidade precisa ser um número !")
+            }
+            const response = await productDatabase.update({name , quantity: Number(quantity), id: Number(id)})
+
+
+            Alert.alert("Produto Atualizado")
         }catch(error){
             console.log(error)
         }
@@ -36,17 +52,57 @@ export default function Index(){
         }
     }
 
+    function details(item: ProductDatabase){
+        setId(String(item.id))
+        setName(item.name)
+        setQuantity(String(item.quantity))
+    }
+
+    async function handleSave() {
+        if(id){
+            update()
+        }else{
+            create()
+        }
+
+        setId("")
+        setName("")
+        setQuantity("")
+        await list()
+    }
+
+    async function remove(id: number) {
+        try{
+            await productDatabase.remove(id)
+            await list()
+        }catch(error){
+            console.log(error)
+        }
+    }
+
     useEffect(()=> {list()},[search])
 
     return(
-        <View style={{flex:1, justifyContent: "center", padding: 32, gap: 16}}>
+        <View style={{flex:1, justifyContent: "center", padding: 32, gap: 16, marginTop: 50}}>
             <Input placeholder="Nome " placeholderTextColor={"#999"} onChangeText={setName} value={name}/>
             <Input placeholder="Quantidade " placeholderTextColor={"#999"} onChangeText={setQuantity} value={quantity}/>
-            <Button title="Salvar" onPress={create}/>
+            
+            <Button title="Salvar" onPress={handleSave}/>
+            
+            <Input placeholder="Buscar " placeholderTextColor={"#999"} onChangeText={setSearch}/>
+            
             <FlatList
                 data={products}
                 keyExtractor={(item) => String(item.id)}
-                renderItem={({item}) => <Product data={item}/>}
+                renderItem={({item}) => (
+                    <Product 
+                        data={item} 
+                        onPress={() => details(item)} 
+                        onDelete={()=>remove(item.id)} 
+                        onOpen={() => router.navigate(`/details/${item.id}`)}
+                    />
+                )}
+                contentContainerStyle={{gap:16}}
             />
         </View>
     )
