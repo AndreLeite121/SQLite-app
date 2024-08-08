@@ -36,4 +36,8 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir uma issue ou env
 
 ## Screenshots
 
-
+<img src="/assets/images/Screenshots/Simulator Screenshot - iPhone 15 - 2024-08-08 at 10.47.32.png" width="500px"/>
+<img src="/assets/images/Screenshots/Simulator Screenshot - iPhone 15 - 2024-08-08 at 10.48.16.png " width="500px"/>
+<img src="/assets/images/Screenshots/Simulator Screenshot - iPhone 15 - 2024-08-08 at 10.47.52.png" width="500px"/>
+<img src="/assets/images/Screenshots/Simulator Screenshot - iPhone 15 - 2024-08-08 at 10.47.40.png" width="500px"/>
+<img src="/assets/images/Screenshots/Simulator Screenshot - iPhone 15 - 2024-08-08 at 10.47.37.png" width="500px"/>
