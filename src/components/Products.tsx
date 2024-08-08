@@ -6,6 +6,7 @@ type Props= PressableProps & {
     data:{
         name: string
         quantity: number
+        brand: string
     }
 
     onDelete: () => void
@@ -23,7 +24,7 @@ export function Product({data, onDelete, onOpen, ...rest}: Props){
         }}
         {...rest}>
             <Text style={{flex: 1}}>
-                {data.quantity} - {data.name}
+                Qtd: {data.quantity} - Prod:{data.name} - Marca:{data.brand}
             </Text>
             
             <TouchableOpacity onPress={onDelete}>

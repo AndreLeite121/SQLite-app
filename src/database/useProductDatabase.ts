@@ -4,22 +4,22 @@ export type ProductDatabase= {
     id: number
     name: string
     quantity: number
+    brand: string
 }
-
-
 
 export function useProductDatabase(){
     const database = useSQLiteContext()
 
     async function create(data:Omit<ProductDatabase, "id">) {
         const statement = await database.prepareAsync(
-            "INSERT INTO products (name, quantity) VALUES ($name, $quantity)"
+            "INSERT INTO products (name, quantity, brand) VALUES ($name, $quantity, $brand)"
         )
 
         try{
             const result = await statement.executeAsync({
                 $name: data.name,
                 $quantity: data.quantity,
+                $brand: data.brand,
             })
 
             const insertedRowId = result.lastInsertRowId.toLocaleString()
@@ -43,7 +43,7 @@ export function useProductDatabase(){
 
     async function update(data: ProductDatabase) {
         const statement = await database.prepareAsync(
-            "UPDATE products SET name = $name, quantity = $quantity WHERE id = $id"
+            "UPDATE products SET name = $name, quantity = $quantity, brand = $brand WHERE id = $id"
         )
 
         try{
@@ -51,6 +51,7 @@ export function useProductDatabase(){
                 $id: data.id,
                 $name: data.name,
                 $quantity: data.quantity,
+                $brand: data.brand,
             })
         }catch(error){
             throw error

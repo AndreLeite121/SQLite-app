@@ -1,6 +1,6 @@
 import { Input } from "@/components/input";
 import { useEffect, useState } from "react";
-import { View, Button, Alert, FlatList, Pressable} from "react-native";
+import { View, Button, Alert, FlatList, Text} from "react-native";
 import {useProductDatabase, ProductDatabase} from "@/database/useProductDatabase"
 import { Product } from "@/components/Products";
 import { router } from "expo-router"
@@ -9,6 +9,7 @@ import { router } from "expo-router"
 export default function Index(){
     const[id, setId] = useState("")
     const[name, setName] = useState("")
+    const[brand, setBrand] = useState("")
     const[search, setSearch] = useState("")
     const[quantity, setQuantity] = useState("")
     const[products, setProducts] = useState<ProductDatabase[]>([])
@@ -20,7 +21,7 @@ export default function Index(){
             if(isNaN(Number(quantity))){
                 return Alert.alert("Quantidade", "A quantidade precisa ser um número !")
             }
-            const response = await productDatabase.create({name , quantity: Number(quantity)})
+            const response = await productDatabase.create({name, brand, quantity: Number(quantity)})
 
 
             Alert.alert("Produto cadastrado com ID: " + response.insertedRowId)
@@ -34,7 +35,7 @@ export default function Index(){
             if(isNaN(Number(quantity))){
                 return Alert.alert("Quantidade", "A quantidade precisa ser um número !")
             }
-            const response = await productDatabase.update({name , quantity: Number(quantity), id: Number(id)})
+            const response = await productDatabase.update({name, brand ,quantity: Number(quantity), id: Number(id)})
 
 
             Alert.alert("Produto Atualizado")
@@ -55,6 +56,7 @@ export default function Index(){
     function details(item: ProductDatabase){
         setId(String(item.id))
         setName(item.name)
+        setBrand(item.brand)
         setQuantity(String(item.quantity))
     }
 
@@ -68,6 +70,7 @@ export default function Index(){
         setId("")
         setName("")
         setQuantity("")
+        setBrand("")
         await list()
     }
 
@@ -83,8 +86,9 @@ export default function Index(){
     useEffect(()=> {list()},[search])
 
     return(
-        <View style={{flex:1, justifyContent: "center", padding: 32, gap: 16, marginTop: 50}}>
+        <View style={{flex:1, justifyContent: "center", padding: 32, gap: 16, marginTop: 50, }}>
             <Input placeholder="Nome " placeholderTextColor={"#999"} onChangeText={setName} value={name}/>
+            <Input placeholder="Marca " placeholderTextColor={"#999"} onChangeText={setBrand} value={brand}/>
             <Input placeholder="Quantidade " placeholderTextColor={"#999"} onChangeText={setQuantity} value={quantity}/>
             
             <Button title="Salvar" onPress={handleSave}/>
